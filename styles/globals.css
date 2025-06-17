@@ -7,4 +7,9 @@ body {
 
 * {
   box-sizing: border-box;
+  /* border: 1px solid red */
+}
+
+h3 {
+  text-align: center;
 }

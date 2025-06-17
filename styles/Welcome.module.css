@@ -1,0 +1,82 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content:flex-start;
+  align-items:flex-start;
+  min-height: 100vh;
+  background-image: url('/twitterBackground.png');
+}
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  width: 40vw;
+  height: 100vh
+}
+
+.largeLogo {
+  width: 30vw
+}
+
+.middlePanel {
+  display: flex;
+  flex-direction: column;
+  justify-content:flex-start;
+  align-items:flex-start;
+  background-color: black;
+  color: white;
+  width: 35vw;
+  height: 100vh;
+  padding-left: 2vw
+}
+
+.smallLogo {
+  width: 100px;
+  padding-bottom: 10vh;
+}
+
+.title {
+  font-size: 5em;
+  font-weight: bold;
+}
+
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:flex-start;
+  background-color: black;
+  color: white;
+  width: 25vw;
+  height: 100vh
+}
+
+.blueButton {
+  width: 200px;
+  height: 40px;
+  background-color: #3282cd;
+  border: 0px;
+  color: white;
+  border-radius: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.blueButton:hover {
+  opacity: 0.8;
+}
+
+.blackButton {
+  width: 200px;
+  height: 40px;
+  background-color: black;
+  border: 1px solid grey;
+  color: white;
+  border-radius: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.blackButton:hover {
+  background-color: #212f3c;
+}

@@ -1,0 +1,35 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  border: 5px dashed grey;
+  width: 20vw;
+  height: 30vh;
+}
+
+.whiteButton {
+  width: 150px;
+  height: 40px;
+  background-color: white;
+  border: none;
+  color: black;
+  border-radius: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.whiteButton:hover {
+  background-color: #d0d3d4;
+}
+
+.inputField {
+width: 150px;
+height: 30px;
+background-color: black;
+color: white;
+border: 1px solid darkgray;
+border-radius: 5px;
+margin: 10px 0px;
+padding-left: 0.5rem;
+}
