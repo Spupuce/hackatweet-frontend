@@ -2,36 +2,41 @@ import styles from "../styles/Welcome.module.css";
 import Signupin from "./Signupin";
 import { useState } from "react";
 
+
 function Welcome() {
   // input & data
   const [signType, setSignType] = useState(""); // "signin" or "signup"
 
   // logic
-  const handleSignupBtn = () => {
+  const deselect = () => {
+    setSignType("");
+  };
+  const handleSignupBtn = (event) => {
+    event.stopPropagation(); // prevent the deselect execution
     setSignType("signup");
   };
-  const handleSigninBtn = () => {
+  const handleSigninBtn = (event) => {
+    event.stopPropagation(); // prevent the deselect execution
     setSignType("signin");
   };
   let loginBox;
 
   // return
   if (signType) {
-    
     loginBox = <Signupin signType={signType} />;
   }
 
   return (
     <div>
       <main className={styles.main}>
-        <div className={styles.leftPanel}>
+        <div className={styles.leftPanel} onClick={deselect}>
           <img
             src="/logoTwitterWhite.png"
             alt="logo Twitter"
             className={styles.largeLogo}
           />
         </div>
-        <div className={styles.middlePanel}>
+        <div className={styles.middlePanel} onClick={deselect}>
           <img
             src="/logoTwitterWhite.png"
             alt="logo Twitter"

@@ -3,8 +3,8 @@
   flex-direction: column;
   justify-content:center;
   align-items:center;
-  border: 1px dashed grey;
-  width: 23vw;
+  border: 5px dashed grey;
+  width: 20vw;
   height: 30vh;
 }
 
@@ -27,8 +27,9 @@
 width: 150px;
 height: 30px;
 background-color: black;
-color: lightgray;
+color: white;
 border: 1px solid darkgray;
-border-radius: 2px;
+border-radius: 5px;
 margin: 10px 0px;
+padding-left: 0.5rem;
 }
