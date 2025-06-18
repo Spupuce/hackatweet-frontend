@@ -13,7 +13,7 @@ function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <Head>
-        <title>hackatweet</title>
+        <title>Hackatweet</title>
       </Head>
       <Component {...pageProps} />
     </Provider>

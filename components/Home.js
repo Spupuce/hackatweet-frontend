@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 import styles from "../styles/Home.module.css";
 import TweetForm from "./TweetForm";
 import Tweet from "./Tweet";
@@ -7,34 +6,42 @@ import Trends from "./Trends";
 
 function Home() {
   const [user, setUser] = useState(null);
+  const [tweets, setTweets] = useState([]);
+  const handleNewTweet = (text) =>
+    setTweets([{ id: Date.now(), text }, ...tweets]);
   return (
     <div className={styles.container}>
       <aside className={styles.sidebarLeft}>
-        <div className={styles.high}>
+        <div className={styles.top}>
           <img
             src="../images/logo.png"
             alt="Logo site"
-            className="logo"
+            className={styles.logo}
             width={85}
           />
         </div>
-        <div className={styles.down}>
-          <img
-            src="../images/user.png"
-            alt="Avatar"
-            className="avatar"
-            width={30}
-          />
-          <div className="user-info">
-          <strong>John </strong>
-          <span>@JohnCena </span>
+        <div className={styles.userSection}>
+          <div className={styles.userRow}>
+            <img
+              src="../images/user.png"
+              alt="Avatar"
+              className={styles.avatar}
+              width={60}
+            />
+            <div className={styles.userInfo}>
+              <strong>John</strong>
+              <span>@JohnCena</span>
+            </div>
           </div>
           <button className={styles.logoutBtn}>Logout</button>
         </div>
       </aside>
       <main className={styles.mainContent}>
         <div className={styles.inputBox}>
-          <TweetForm />
+          <TweetForm onNewTweet={handleNewTweet} />
+          {tweets.map((tweet) => (
+            <Tweet key={tweet.id} tweet={tweet} />
+          ))}
         </div>
         <div className={styles.tweetsList}>
           <Tweet />
