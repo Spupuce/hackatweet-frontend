@@ -49,7 +49,7 @@ function Home() {
         </div>
       </main>
       <aside className={styles.sidebarRight}>
-        <Trends />
+        <Trends tweets={tweets}/>
       </aside>
     </div>
   );
