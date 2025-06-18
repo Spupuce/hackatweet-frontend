@@ -17,7 +17,7 @@ function parseTweetText(text) {
 }
 
 function Tweet({ tweet, user, onLike, onDelete }) {
-  // Sécurité supplémentaire : si pas de tweet, on ne rend rien
+  // Si pas de tweet, on ne rend rien
   if (!tweet || !tweet.text) return null;
 
   const isOwner = user && tweet.userId === user.id;
