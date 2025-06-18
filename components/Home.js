@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 import styles from "../styles/Home.module.css";
 import TweetForm from "./TweetForm";
 import Tweet from "./Tweet";
@@ -21,16 +20,18 @@ function Home() {
             width={85}
           />
         </div>
-        <div className={styles.down}>
-          <img
-            src="../images/user.png"
-            alt="Avatar"
-            className={styles.avatar}
-            width={60}
-          />
-          <div className="user-info">
-            <strong>John </strong>
-            <span>@JohnCena </span>
+        <div className={styles.userSection}>
+          <div className={styles.userRow}>
+            <img
+              src="../images/user.png"
+              alt="Avatar"
+              className={styles.avatar}
+              width={60}
+            />
+            <div className={styles.userInfo}>
+              <strong>John</strong>
+              <span>@JohnCena</span>
+            </div>
           </div>
           <button className={styles.logoutBtn}>Logout</button>
         </div>
