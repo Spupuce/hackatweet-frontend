@@ -43,7 +43,7 @@ function Tweet({ tweet, user, onLike, onDelete }) {
         <button
           className="like-btn"
           onClick={() => setLiked(!liked)}
-          aria-label={liked ? "Retirer le like" : "Aimer"}
+          aria-label={liked ? "Supprimer le like" : "Aimer"}
         >
           <FontAwesomeIcon
             icon={faHeart}
