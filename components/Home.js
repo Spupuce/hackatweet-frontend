@@ -1,14 +1,26 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../reducers/user";
 import styles from "../styles/Home.module.css";
 import TweetForm from "./TweetForm";
 import Tweet from "./Tweet";
 import Trends from "./Trends";
 
 function Home() {
-  const [user, setUser] = useState(null);
+  // data & input
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  console.log("page Home user: ",user)
   const [tweets, setTweets] = useState([]);
+
+  // logic
   const handleNewTweet = (text) =>
     setTweets([{ id: Date.now(), text }, ...tweets]);
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  }
+
+  // return
   return (
     <div className={styles.container}>
       <aside className={styles.sidebarLeft}>
@@ -33,7 +45,9 @@ function Home() {
               <span>@JohnCena</span>
             </div>
           </div>
-          <button className={styles.logoutBtn}>Logout</button>
+          <button className={styles.logoutBtn} onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </aside>
       <main className={styles.mainContent}>

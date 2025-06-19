@@ -1,7 +1,7 @@
 import styles from "../styles/Signupin.module.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { loginUser, logoutUser } from "../reducers/user";
+import { loginUser } from "../reducers/user";
 
 function Signupin(props) {
   // input, data
@@ -32,7 +32,7 @@ function Signupin(props) {
       const data = await response.json();
       console.log("Log data output:", data);
       if (data.result) {
-        dispatch(loginUser({ token: data.token, username: data.username }));
+        dispatch(loginUser(data.user));
       } else {
         alert(data.error);
       }
