@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../reducers/user";
 import styles from "../styles/Home.module.css";
@@ -10,15 +10,59 @@ function Home() {
   // data & input
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  console.log("page Home user: ",user)
   const [tweets, setTweets] = useState([]);
 
+  useEffect(() => {
+    fetch("/tweets")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result) {
+          setTweets(data.tweets);
+        }
+      });
+  }, []);
+
   // logic
-  const handleNewTweet = (text) =>
-    setTweets([{ id: Date.now(), text }, ...tweets]);
+  const handleNewTweet = (text) => {
+    // Envoi vers l'API
+    fetch("/tweets/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user: user._id,
+        content: text,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result) {
+          // Recharge les tweets après ajout
+          fetch("/tweets")
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.result) {
+                setTweets(data.tweets);
+              }
+            });
+        }
+      });
+  };
+
+  const handleDelete = (tweetId) => {
+  fetch(`/tweets/delete/${tweetId}`, {
+    method: "DELETE",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.result) {
+        setTweets((prevTweets) => prevTweets.filter((tweet) => tweet._id !== tweetId));
+      }
+    });
+};
+
   const handleLogout = () => {
     dispatch(logoutUser());
-  }
+  };
 
   // return
   return (
@@ -41,8 +85,8 @@ function Home() {
               width={60}
             />
             <div className={styles.userInfo}>
-              <strong>John</strong>
-              <span>@JohnCena</span>
+              <strong>{user.firstname}</strong>
+              <span>@{user.username}</span>
             </div>
           </div>
           <button className={styles.logoutBtn} onClick={handleLogout}>
@@ -54,16 +98,21 @@ function Home() {
         <div className={styles.inputBox}>
           <TweetForm onNewTweet={handleNewTweet} />
           {tweets.map((tweet) => (
-            <Tweet key={tweet.id} tweet={tweet} />
+            <Tweet key={tweet._id} tweet={tweet} user={user} onDelete={handleDelete} />
           ))}
         </div>
         <div className={styles.tweetsList}>
-          <Tweet />
-          <Tweet />
+          {tweets.length === 0 ? (
+            <p>Aucun tweet pour le moment.</p>
+          ) : (
+            tweets.map((tweet) => (
+              <Tweet key={tweet._id} tweet={tweet} user={user} />
+            ))
+          )}
         </div>
       </main>
       <aside className={styles.sidebarRight}>
-        <Trends tweets={tweets}/>
+        <Trends tweets={tweets} />
       </aside>
     </div>
   );

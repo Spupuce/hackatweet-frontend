@@ -3,6 +3,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/Tweet.module.css";
 
+// Affichage du temps
+function formatElapsedTime(dateString) {
+  const now = new Date();
+  const tweetDate = new Date(dateString);
+  const diffMs = now - tweetDate;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHrs = Math.floor(diffMin / 60);
+  const diffDays = Math.floor(diffHrs / 24);
+  const diffWeeks = Math.floor(diffDays / 7);
+  const diffMonths = Math.floor(diffDays / 30.44); // moyenne d'un mois
+  const diffYears = Math.floor(diffDays / 365);
+
+  if (diffSec < 60) {
+    return `il y a ${diffSec} seconde${diffSec > 1 ? "s" : ""}`;
+  } else if (diffMin < 60) {
+    return `il y a ${diffMin} minute${diffMin > 1 ? "s" : ""}`;
+  } else if (diffHrs < 24) {
+    return `il y a ${diffHrs} heure${diffHrs > 1 ? "s" : ""}`;
+  } else if (diffDays < 7) {
+    return `il y a ${diffDays} jour${diffDays > 1 ? "s" : ""}`;
+  } else if (diffWeeks < 4) {
+    return `il y a ${diffWeeks} semaine${diffWeeks > 1 ? "s" : ""}`;
+  } else if (diffMonths < 12) {
+    return `il y a ${diffMonths} mois`;
+  } else {
+    return `il y a ${diffYears} an${diffYears > 1 ? "s" : ""}`;
+  }
+}
+
+// Coloration des hashtags
 function parseTweetText(text) {
   const parts = text.split(/(\s+)/);
   return parts.map((part, i) =>
@@ -18,9 +49,11 @@ function parseTweetText(text) {
 
 function Tweet({ tweet, user, onLike, onDelete }) {
   // Si pas de tweet, on ne rend rien
-  if (!tweet || !tweet.text) return null;
+  if (!tweet || !tweet.content) return null;
 
-  const isOwner = user && tweet.userId === user.id;
+  const isOwner = tweet.user === user._id;
+
+
   const [liked, setLiked] = useState(false);
 
   return (
@@ -32,12 +65,14 @@ function Tweet({ tweet, user, onLike, onDelete }) {
           className="avatar"
           width={60}
         />
-        <strong>John </strong>
-        <span className="grey">@JohnCena </span>
-        <span className="tweet-date grey">. 5 hours</span>
+        <strong>{user.firstname} </strong>
+        <span className="grey">@{user.username} </span>
+        <span className="tweet-date grey">
+          · {formatElapsedTime(tweet.date)}
+        </span>
       </div>
       <div className="tweet-content">
-        <p>{parseTweetText(tweet.text)}</p>
+        <p>{parseTweetText(tweet.content)}</p>
       </div>
       <div className={styles.tweetActions}>
         <button
@@ -50,8 +85,8 @@ function Tweet({ tweet, user, onLike, onDelete }) {
             className={`${styles.heart} ${liked ? styles.liked : ""}`}
           />
         </button>
-        {isOwner && onDelete && (
-          <button onClick={() => onDelete(tweet.id)}>
+        {isOwner && (
+          <button onClick={() => onDelete && onDelete(tweet._id)}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
         )}

@@ -1,28 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/Trends.module.css";
 
-// Extraction des Hashtags
-function extractHashtags(tweets){
-  const hashtags = {};
-  // Tous ce qui commence par #
-    tweets.forEach((tweet) => {
-    const matches = tweet.text.match(/#\w+/g);
-    if (matches) {
-      matches.forEach((tag) => {
-        // Si résultat à objet hashtag et incrémentation
-        hashtags[tag] = (hashtags[tag] || 0) + 1;
-      });
-    }
-  });
-  // On retourne les hashtags triés par popularité
-  return Object.entries(hashtags)
-    .sort((a, b) => b[1] - a[1])
-    .map(([tag, count]) => ({ tag, count }));
-}
-
-
 function Trends({tweets = []}) {
-  const hashtags = extractHashtags(tweets)
+  const [hashtags, setHashtags] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/tweets/hashtags")
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.result) {
+        setHashtags(
+          data.hashtags.map(({hashtag, count}) => ({
+            tag: hashtag,
+            count,
+          }))
+        )
+      }
+      setLoading(false)
+    })
+  })
   return (
     <aside className={styles.trendsBox}>
       <h3 className={styles.title}>Trends</h3>
@@ -30,7 +27,7 @@ function Trends({tweets = []}) {
         {hashtags.length === 0 ? (
           <li className={styles.trendItem}>
             {/* Si rien à afficher ou pas de Tweet */}
-            <span className={styles.hashtag}>Aucun hashtag</span>
+            <span className={styles.hashtag}>No hashtag</span>
             <span className={styles.count}>0 Tweet</span>
           </li>
         ) : (
