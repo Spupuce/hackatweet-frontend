@@ -1,11 +1,35 @@
+.fullScreen {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
 .main {
   display: flex;
   flex-direction: column;
-  justify-content:center;
-  align-items:center;
-  border: 5px dashed grey;
-  width: 20vw;
-  height: 30vh;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #273746;
+  color: white;
+  border: 2px dashed grey;
+  width: 400px;
+  height: 450px;
+  border-radius: 30px;
+}
+
+.xClose {
+  width: 90%;
+  text-align: right;
+  color: #ff0000;
+  cursor: pointer;
+}
+
+.smallLogo {
+  width: 80px;
 }
 
 .whiteButton {
@@ -18,18 +42,19 @@
   font-size: 1.2em;
   font-weight: bold;
   margin-top: 10px;
+  cursor: pointer;
 }
 .whiteButton:hover {
   background-color: #d0d3d4;
 }
 
 .inputField {
-width: 150px;
-height: 30px;
-background-color: black;
-color: white;
-border: 1px solid darkgray;
-border-radius: 5px;
-margin: 10px 0px;
-padding-left: 0.5rem;
+  width: 200px;
+  height: 30px;
+  background-color: black;
+  color: white;
+  border: 1px solid darkgray;
+  border-radius: 5px;
+  margin: 10px 0px;
+  padding-left: 0.5rem;
 }

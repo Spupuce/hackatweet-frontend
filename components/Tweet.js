@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/Tweet.module.css";
@@ -17,6 +18,8 @@ function parseTweetText(text) {
 }
 
 function Tweet({ tweet, user, onLike, onDelete }) {
+  // data & input
+  const currentUser = useSelector((state) => state.user.value);
   // Si pas de tweet, on ne rend rien
   if (!tweet || !tweet.text) return null;
 
@@ -32,8 +35,8 @@ function Tweet({ tweet, user, onLike, onDelete }) {
           className="avatar"
           width={60}
         />
-        <strong>John </strong>
-        <span className="grey">@JohnCena </span>
+        <strong>{currentUser.firstname} </strong>
+        <span className="grey">@{currentUser.username}</span>
         <span className="tweet-date grey">. 5 hours</span>
       </div>
       <div className="tweet-content">

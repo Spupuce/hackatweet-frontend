@@ -8,35 +8,33 @@ function Welcome() {
   const [signType, setSignType] = useState(""); // "signin" or "signup"
 
   // logic
-  const deselect = () => {
-    setSignType("");
-  };
   const handleSignupBtn = (event) => {
-    event.stopPropagation(); // prevent the deselect execution
     setSignType("signup");
   };
   const handleSigninBtn = (event) => {
-    event.stopPropagation(); // prevent the deselect execution
     setSignType("signin");
   };
+  const closeModal = (isXclicked) => {
+    isXclicked && setSignType("");
+  }
   let loginBox;
 
   // return
   if (signType) {
-    loginBox = <Signupin signType={signType} />;
+    loginBox = <Signupin signType={signType} closeModal={closeModal} />;
   }
 
   return (
     <div>
       <main className={styles.main}>
-        <div className={styles.leftPanel} onClick={deselect}>
+        <div className={styles.leftPanel} >
           <img
             src="/logoTwitterWhite.png"
             alt="logo Twitter"
             className={styles.largeLogo}
           />
         </div>
-        <div className={styles.middlePanel} onClick={deselect}>
+        <div className={styles.middlePanel}>
           <img
             src="/logoTwitterWhite.png"
             alt="logo Twitter"
@@ -52,7 +50,7 @@ function Welcome() {
             Sign in
           </button>
         </div>
-        <div className={styles.rightPanel}>{loginBox}</div>
+        {loginBox}
       </main>
     </div>
   );

@@ -41,8 +41,8 @@ function Home() {
               width={60}
             />
             <div className={styles.userInfo}>
-              <strong>John</strong>
-              <span>@JohnCena</span>
+              <strong>{user.firstname }</strong>
+              <span>@{user.username}</span>
             </div>
           </div>
           <button className={styles.logoutBtn} onClick={handleLogout}>
