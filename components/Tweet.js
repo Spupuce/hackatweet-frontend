@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -49,15 +49,32 @@ function parseTweetText(text) {
 }
 
 function Tweet({ tweet, user, onLike, onDelete }) {
-  // data & input
-  const currentUser = useSelector((state) => state.user.value);
-  // Si pas de tweet, on ne rend rien
-  if (!tweet || !tweet.content) return null;
-
-  const isOwner = tweet.user === user._id;
-
-
+  // Initialisation des likes
+  const [likers, setLikers] = useState(tweet.likers || []);
   const [liked, setLiked] = useState(false);
+
+  // Vérifie si l'utilisateur connecté a liké ce tweet
+  useEffect(() => {
+    setLiked(likers.includes(user._id));
+  }, [likers, user._id]);
+
+  // Vérifie si l'utilisateur connecté est le propriétaire du tweet
+  const isOwner = tweet.user && tweet.user._id === user._id;
+
+  // Gestion du like
+  const handleLike = () => {
+    fetch("/tweets/like", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: user._id, tweetId: tweet._id }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result) {
+          setLikers(data.likers);
+        }
+      });
+  };
 
   return (
     <div className="tweet">
@@ -68,8 +85,8 @@ function Tweet({ tweet, user, onLike, onDelete }) {
           className="avatar"
           width={60}
         />
-        <strong>{user.firstname} </strong>
-        <span className="grey">@{user.username} </span>
+        <strong>{tweet.user.firstname} </strong>
+        <span className="grey">@{tweet.user.username} </span>
         <span className="tweet-date grey">
           · {formatElapsedTime(tweet.date)}
         </span>
@@ -80,7 +97,7 @@ function Tweet({ tweet, user, onLike, onDelete }) {
       <div className={styles.tweetActions}>
         <button
           className="like-btn"
-          onClick={() => setLiked(!liked)}
+          onClick={handleLike}
           aria-label={liked ? "Supprimer le like" : "Aimer"}
         >
           <FontAwesomeIcon
@@ -88,8 +105,8 @@ function Tweet({ tweet, user, onLike, onDelete }) {
             className={`${styles.heart} ${liked ? styles.liked : ""}`}
           />
         </button>
-        {isOwner && (
-          <button onClick={() => onDelete && onDelete(tweet._id)}>
+        {tweet.user && tweet.user._id === user._id && onDelete && (
+          <button onClick={() => onDelete(tweet._id)}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
         )}

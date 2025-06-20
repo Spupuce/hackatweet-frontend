@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/Trends.module.css";
 
-function Trends({tweets = []}) {
+function Trends({ onTagClick }) {
   const [hashtags, setHashtags] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/tweets/hashtags")
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.result) {
-        setHashtags(
-          data.hashtags.map(({hashtag, count}) => ({
-            tag: hashtag,
-            count,
-          }))
-        )
-      }
-      setLoading(false)
-    })
-  })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result) {
+          setHashtags(
+            data.hashtags.map(({ hashtag, count }) => ({
+              tag: hashtag,
+              count,
+            }))
+          );
+        }
+        setLoading(false);
+      });
+  }, []);
   return (
     <aside className={styles.trendsBox}>
       <h3 className={styles.title}>Trends</h3>
@@ -32,7 +32,12 @@ function Trends({tweets = []}) {
           </li>
         ) : (
           hashtags.map(({ tag, count }) => (
-            <li key={tag} className={styles.trendItem}>
+            <li
+              key={tag}
+              className={styles.trendItem}
+              onClick={() => onTagClick(tag.replace("#", ""))}
+              style={{ cursor: "pointer" }}
+            >
               <span className={styles.hashtag}>{tag}</span>
               <span className={styles.count}>
                 {/* Si tweet superieur à 1 on ajoute un s */}

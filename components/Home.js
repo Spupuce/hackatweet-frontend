@@ -11,16 +11,27 @@ function Home() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const [tweets, setTweets] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(null);
 
   useEffect(() => {
-    fetch("/tweets")
-      .then((res) => res.json())
-      .then((data) => {
+    if (selectedTag) {
+      fetch(`/tweets/hashtags/${selectedTag.replace('#', '')}`)
+      .then(res => res.json())
+      .then(data => {
         if (data.result) {
           setTweets(data.tweets);
         }
       });
-  }, []);
+    } else {
+      fetch("/tweets")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.result) {
+            setTweets(data.tweets);
+          }
+        });
+    }
+  }, [selectedTag]);
 
   // logic
   const handleNewTweet = (text) => {
@@ -49,20 +60,32 @@ function Home() {
   };
 
   const handleDelete = (tweetId) => {
-  fetch(`/tweets/delete/${tweetId}`, {
-    method: "DELETE",
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.result) {
-        setTweets((prevTweets) => prevTweets.filter((tweet) => tweet._id !== tweetId));
-      }
-    });
-};
+    fetch(`/tweets/delete/${tweetId}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result) {
+          setTweets((prevTweets) =>
+            prevTweets.filter((tweet) => tweet._id !== tweetId)
+          );
+        }
+      });
+  };
 
   const handleLogout = () => {
     dispatch(logoutUser());
   };
+
+  //click management on #
+  const handleTagClick = (tag) => {
+  setSelectedTag(tag);
+};
+
+// Revenir aux Tweets
+const handleResetTag = () => {
+  setSelectedTag(null);
+};
 
   // return
   return (
@@ -96,23 +119,25 @@ function Home() {
       </aside>
       <main className={styles.mainContent}>
         <div className={styles.inputBox}>
-          <TweetForm onNewTweet={handleNewTweet} />
-          {tweets.map((tweet) => (
-            <Tweet key={tweet._id} tweet={tweet} user={user} onDelete={handleDelete} />
-          ))}
+          <TweetForm onNewTweet={handleNewTweet}  onResetTag={handleResetTag} />
         </div>
         <div className={styles.tweetsList}>
           {tweets.length === 0 ? (
-            <p>Aucun tweet pour le moment.</p>
+            <p>No tweets yet.</p>
           ) : (
             tweets.map((tweet) => (
-              <Tweet key={tweet._id} tweet={tweet} user={user} />
+              <Tweet
+                key={tweet._id}
+                tweet={tweet}
+                user={user}
+                onDelete={handleDelete}
+              />
             ))
           )}
         </div>
       </main>
       <aside className={styles.sidebarRight}>
-        <Trends tweets={tweets} />
+        <Trends onTagClick={handleTagClick} />
       </aside>
     </div>
   );
