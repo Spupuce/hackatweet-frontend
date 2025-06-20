@@ -36,7 +36,7 @@ function Signupin(props) {
       } else {
         alert(data.error);
       }
-        !data.result && alert(data.error);
+      !data.result && alert(data.error);
       // setFirstname("");
       // setUsername("");
       // setPassword("");
@@ -44,6 +44,11 @@ function Signupin(props) {
       console.error("Fetch error:", error);
     }
   };
+
+  // close the modal window
+  const handleClickX = () => {
+    props.closeModal(true);
+  }
 
   // return
   const inviteMsg =
@@ -60,8 +65,16 @@ function Signupin(props) {
   );
 
   return (
-    <div>
+    <div className={styles.fullScreen}>
       <main className={styles.main}>
+        <h3 className={styles.xClose} onClick={handleClickX}>
+          X
+        </h3>
+        <img
+          src="/logoTwitterWhite.png"
+          alt="logo Twitter"
+          className={styles.smallLogo}
+        />
         <h3>{inviteMsg}</h3>
         {firstnameInput}
         <input
