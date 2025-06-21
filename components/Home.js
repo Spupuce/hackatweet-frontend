@@ -11,18 +11,11 @@ function Home() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
-  // console.log("page Home user: ", user);
-  // const toto = fetch("http://localhost:3000/tweets/")
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log("fetch tweets: ", data);
-  //   });
-  // console.log("getTweets: ", toto);
-
   const [tweets, setTweets] = useState([]);
   const [hashtags, setHashtags] = useState([]);
   const [selectedTag, setSelectedTag] = useState(null);
 
+    // Récupération des tweets à chaque changement de hashtag sélectionné
   useEffect(() => {
     if (selectedTag) {
       fetch(`/tweets/hashtags/${selectedTag.replace("#", "")}`)
@@ -43,7 +36,13 @@ function Home() {
     }
   }, [selectedTag]);
 
+  // Récupération des hashtags au montage du composant
+    useEffect(() => {
+    fetchHashtags();
+  }, []);
+
   // logic
+    // Ajout d’un nouveau tweet, puis rafraîchissement des tweets et hashtags
   const handleNewTweet = (text) => {
   fetch("/tweets/add", {
     method: "POST",
@@ -62,6 +61,7 @@ function Home() {
     });
 };
 
+ // Suppression d’un tweet, puis rafraîchissement des tweets et hashtags
 const handleDelete = (tweetId) => {
   fetch(`/tweets/delete/${tweetId}`, {
     method: "DELETE",
@@ -75,6 +75,7 @@ const handleDelete = (tweetId) => {
     });
 };
 
+// Récupérer les tweets
   const fetchTweets = (tag = null) => {
   const url = tag
     ? `/tweets/hashtags/${tag.replace('#', '')}`
@@ -86,6 +87,7 @@ const handleDelete = (tweetId) => {
     });
 };
 
+  // Récupérer les hashtags
 const fetchHashtags = () => {
   fetch("/tweets/hashtags")
     .then(res => res.json())
@@ -94,14 +96,17 @@ const fetchHashtags = () => {
     });
 };
 
+ // Déconnexion de l'utilisateur
   const handleLogout = () => {
     dispatch(logoutUser());
   };
 
+    // Sélection d’un hashtag pour filtrer les tweets
   const handleTagClick = (tag) => {
   setSelectedTag(`#${tag}`);
 };
 
+// Réinitialisation du filtre hashtag (affiche tous les tweets)
   const handleResetTag = () => {
     setSelectedTag(null);
   };
@@ -158,7 +163,7 @@ const fetchHashtags = () => {
         </div>
       </main>
       <aside className={styles.sidebarRight}>
-        <Trends tweets={tweets} hashtags={hashtags} onTagClick={handleTagClick} />
+        <Trends hashtags={hashtags} onTagClick={handleTagClick} />
       </aside>
     </div>
   );

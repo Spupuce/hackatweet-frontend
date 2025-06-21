@@ -4,6 +4,7 @@ import styles from "../styles/TweetForm.module.css";
 function TweetForm({ onNewTweet, onResetTag }) {
   const [text, setText] = useState("");
 
+  // Envoie du tweet si valide
   const handleSubmit = e => {
     e.preventDefault();
     if (text.trim() && text.length <= 280) {

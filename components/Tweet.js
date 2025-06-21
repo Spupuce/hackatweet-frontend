@@ -14,7 +14,8 @@ function formatElapsedTime(dateString) {
   const diffHrs = Math.floor(diffMin / 60);
   const diffDays = Math.floor(diffHrs / 24);
   const diffWeeks = Math.floor(diffDays / 7);
-  const diffMonths = Math.floor(diffDays / 30.44); // moyenne d'un mois
+  // moyenne d'un mois
+  const diffMonths = Math.floor(diffDays / 30.44); 
   const diffYears = Math.floor(diffDays / 365);
 
   if (diffSec < 60) {
@@ -48,7 +49,7 @@ function parseTweetText(text) {
   );
 }
 
-function Tweet({ tweet, user, onLike, onDelete }) {
+function Tweet({ tweet, user, onDelete }) {
   // Initialisation des likes
   const [likers, setLikers] = useState(tweet.likers || []);
   const [liked, setLiked] = useState(false);
