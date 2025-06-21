@@ -84,6 +84,11 @@ function Home() {
     dispatch(logoutUser());
   };
 
+  const handleResetTag = () => {
+  setSelectedTag(null);
+};
+
+
   // return
   return (
     <div className={styles.container}>
