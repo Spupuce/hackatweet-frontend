@@ -10,6 +10,13 @@ function Home() {
   // data & input
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  console.log("page Home user: ", user);
+  const toto = fetch("http://localhost:3000/tweets/")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("fetch tweets: ", data);
+    });
+  console.log("getTweets: ", toto);
   const [tweets, setTweets] = useState([]);
   const [selectedTag, setSelectedTag] = useState(null);
 
@@ -77,16 +84,6 @@ function Home() {
     dispatch(logoutUser());
   };
 
-  //click management on #
-  const handleTagClick = (tag) => {
-  setSelectedTag(tag);
-};
-
-// Revenir aux Tweets
-const handleResetTag = () => {
-  setSelectedTag(null);
-};
-
   // return
   return (
     <div className={styles.container}>
@@ -137,7 +134,7 @@ const handleResetTag = () => {
         </div>
       </main>
       <aside className={styles.sidebarRight}>
-        <Trends onTagClick={handleTagClick} />
+        <Trends tweets={tweets} />
       </aside>
     </div>
   );

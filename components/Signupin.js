@@ -36,10 +36,6 @@ function Signupin(props) {
       } else {
         alert(data.error);
       }
-      !data.result && alert(data.error);
-      // setFirstname("");
-      // setUsername("");
-      // setPassword("");
     } catch (error) {
       console.error("Fetch error:", error);
     }
