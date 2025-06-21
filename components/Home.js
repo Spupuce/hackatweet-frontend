@@ -10,7 +10,13 @@ function Home() {
   // data & input
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  console.log("page Home user: ",user)
+  console.log("page Home user: ", user);
+  const toto = fetch("http://localhost:3000/tweets/")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("fetch tweets: ", data);
+    });
+  console.log("getTweets: ", toto);
   const [tweets, setTweets] = useState([]);
 
   // logic
@@ -18,7 +24,7 @@ function Home() {
     setTweets([{ id: Date.now(), text }, ...tweets]);
   const handleLogout = () => {
     dispatch(logoutUser());
-  }
+  };
 
   // return
   return (
@@ -41,7 +47,7 @@ function Home() {
               width={60}
             />
             <div className={styles.userInfo}>
-              <strong>{user.firstname }</strong>
+              <strong>{user.firstname}</strong>
               <span>@{user.username}</span>
             </div>
           </div>
@@ -63,7 +69,7 @@ function Home() {
         </div>
       </main>
       <aside className={styles.sidebarRight}>
-        <Trends tweets={tweets}/>
+        <Trends tweets={tweets} />
       </aside>
     </div>
   );
