@@ -14,14 +14,7 @@ function TweetForm({ onNewTweet, onResetTag }) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h2
-        className={styles.title}
-        style={{ cursor: "pointer" }}
-        onClick={onResetTag}
-        title="Revenir à l'accueil"
-      >
-        Home
-      </h2>
+      <h2 className={styles.title}>Home</h2>
       <input
         type="text"
         className={styles.input}

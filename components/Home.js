@@ -10,25 +10,28 @@ function Home() {
   // data & input
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  console.log("page Home user: ", user);
-  const toto = fetch("http://localhost:3000/tweets/")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("fetch tweets: ", data);
-    });
-  console.log("getTweets: ", toto);
+
+  // console.log("page Home user: ", user);
+  // const toto = fetch("http://localhost:3000/tweets/")
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     console.log("fetch tweets: ", data);
+  //   });
+  // console.log("getTweets: ", toto);
+
   const [tweets, setTweets] = useState([]);
+  const [hashtags, setHashtags] = useState([]);
   const [selectedTag, setSelectedTag] = useState(null);
 
   useEffect(() => {
     if (selectedTag) {
-      fetch(`/tweets/hashtags/${selectedTag.replace('#', '')}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.result) {
-          setTweets(data.tweets);
-        }
-      });
+      fetch(`/tweets/hashtags/${selectedTag.replace("#", "")}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.result) {
+            setTweets(data.tweets);
+          }
+        });
     } else {
       fetch("/tweets")
         .then((res) => res.json())
@@ -42,46 +45,65 @@ function Home() {
 
   // logic
   const handleNewTweet = (text) => {
-    // Envoi vers l'API
-    fetch("/tweets/add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user: user._id,
-        content: text,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.result) {
-          // Recharge les tweets après ajout
-          fetch("/tweets")
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.result) {
-                setTweets(data.tweets);
-              }
-            });
-        }
-      });
-  };
+  fetch("/tweets/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user: user._id,
+      content: text,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.result) {
+        fetchTweets(selectedTag);
+        fetchHashtags();
+      }
+    });
+};
 
-  const handleDelete = (tweetId) => {
-    fetch(`/tweets/delete/${tweetId}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.result) {
-          setTweets((prevTweets) =>
-            prevTweets.filter((tweet) => tweet._id !== tweetId)
-          );
-        }
-      });
-  };
+const handleDelete = (tweetId) => {
+  fetch(`/tweets/delete/${tweetId}`, {
+    method: "DELETE",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.result) {
+        fetchTweets(selectedTag);
+        fetchHashtags();
+      }
+    });
+};
+
+  const fetchTweets = (tag = null) => {
+  const url = tag
+    ? `/tweets/hashtags/${tag.replace('#', '')}`
+    : "/tweets";
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      if (data.result) setTweets(data.tweets);
+    });
+};
+
+const fetchHashtags = () => {
+  fetch("/tweets/hashtags")
+    .then(res => res.json())
+    .then(data => {
+      if (data.result) setHashtags(data.hashtags);
+    });
+};
 
   const handleLogout = () => {
     dispatch(logoutUser());
+  };
+
+  const handleTagClick = (tag) => {
+  setSelectedTag(`#${tag}`);
+};
+
+  const handleResetTag = () => {
+    setSelectedTag(null);
   };
 
   // return
@@ -94,6 +116,8 @@ function Home() {
             alt="Logo site"
             className={styles.logo}
             width={85}
+            style={{ cursor: "pointer" }}
+            onClick={handleResetTag}
           />
         </div>
         <div className={styles.userSection}>
@@ -116,7 +140,7 @@ function Home() {
       </aside>
       <main className={styles.mainContent}>
         <div className={styles.inputBox}>
-          <TweetForm onNewTweet={handleNewTweet}  onResetTag={handleResetTag} />
+          <TweetForm onNewTweet={handleNewTweet} onResetTag={handleResetTag} />
         </div>
         <div className={styles.tweetsList}>
           {tweets.length === 0 ? (
@@ -134,7 +158,7 @@ function Home() {
         </div>
       </main>
       <aside className={styles.sidebarRight}>
-        <Trends tweets={tweets} />
+        <Trends tweets={tweets} hashtags={hashtags} onTagClick={handleTagClick} />
       </aside>
     </div>
   );

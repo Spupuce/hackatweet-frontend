@@ -104,6 +104,7 @@ function Tweet({ tweet, user, onLike, onDelete }) {
             icon={faHeart}
             className={`${styles.heart} ${liked ? styles.liked : ""}`}
           />
+          <span className={styles.likeCount}>{likers.length}</span>
         </button>
         {tweet.user && tweet.user._id === user._id && onDelete && (
           <button onClick={() => onDelete(tweet._id)}>

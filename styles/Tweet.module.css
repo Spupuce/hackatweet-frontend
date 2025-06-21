@@ -21,3 +21,7 @@
 .liked {
   color: #e0245e;
 }
+
+.likeCount {
+  padding-left: 5px;
+}
